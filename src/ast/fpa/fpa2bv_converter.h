@@ -144,8 +144,11 @@ public:
     void dbg_decouple(const char * prefix, expr_ref & e);
     expr_ref_vector m_extra_assertions;
 
+    bool is_special(func_decl * f) { return m_specials.contains(f); }
+    bool is_uf2bvuf(func_decl * f) { return m_uf2bvuf.contains(f); }
+
 protected:
-    void mk_one(func_decl *f, expr_ref sign, expr_ref & result);
+    void mk_one(func_decl *f, expr_ref & sign, expr_ref & result);
 
     void mk_is_nan(expr * e, expr_ref & result);
     void mk_is_inf(expr * e, expr_ref & result);
@@ -184,6 +187,25 @@ protected:
     void mk_to_bv(func_decl * f, unsigned num, expr * const * args, bool is_signed, expr_ref & result);
 
     void mk_uninterpreted_output(sort * rng, func_decl * fbv, expr_ref_buffer & new_args, expr_ref & result);
+
+private:
+    void mk_nan(sort * s, expr_ref & result);
+    void mk_nzero(sort * s, expr_ref & result);
+    void mk_pzero(sort * s, expr_ref & result);
+    void mk_zero(sort * s, expr_ref & sgn, expr_ref & result);
+    void mk_ninf(sort * s, expr_ref & result);
+    void mk_pinf(sort * s, expr_ref & result);
+
+    void mk_one(sort * s, expr_ref & sign, expr_ref & result);
+    void mk_neg(sort * s, expr_ref & x, expr_ref & result);
+    void mk_add(sort * s, expr_ref & bv_rm, expr_ref & x, expr_ref & y, expr_ref & result);
+    void mk_sub(sort * s, expr_ref & bv_rm, expr_ref & x, expr_ref & y, expr_ref & result);
+    void mk_mul(sort * s, expr_ref & bv_rm, expr_ref & x, expr_ref & y, expr_ref & result);
+    void mk_div(sort * s, expr_ref & bv_rm, expr_ref & x, expr_ref & y, expr_ref & result);
+    void mk_rem(sort * s, expr_ref & x, expr_ref & y, expr_ref & result);
+    void mk_round_to_integral(sort * s, expr_ref & rm, expr_ref & x, expr_ref & result);
+
+    void mk_to_fp_float(sort * s, expr * rm, expr * x, expr_ref & result);
 };
 
 #endif
